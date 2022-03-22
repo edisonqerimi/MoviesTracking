@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Movie>
+@{
+    ViewBag.Title = "Manage Movies";
+}
+
+    <div class="manage   gap-3">
+        <div class=" flex items-center justify-center">
+            <a asp-action="Add" class=" w-48 h-48  shadow-2xl rounded-full bg-secondary text-secondary-content flex justify-center items-center">
+                <svg class="w-1/2"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4C11.4477 4 11 4.44772 11 5V11H5C4.44772 11 4 11.4477 4 12C4 12.5523 4.44772 13 5 13H11V19C11 19.5523 11.4477 20 12 20C12.5523 20 13 19.5523 13 19V13H19C19.5523 13 20 12.5523 20 12C20 11.4477 19.5523 11 19 11H13V5C13 4.44772 12.5523 4 12 4Z"
+                          fill="#000000" fill-opacity="0.8" />
+                </svg>
+            </a>
+        </div>
+        @foreach (var item in Model)
+        {
+            string photo;
+            if (item.PhotoSource == PhotoSource.Upload)
+            {
+                photo = "../uploads/" + item.PhotoPath;
+            }
+            else if (item.PhotoSource == PhotoSource.Link)
+            {
+                photo = item.PhotoLink;
+            }
+            else
+            {
+                photo = "../img/x.jpg";
+            }
+            <div style="background:url(@photo); background-size:cover" class="card  shadow-2xl lg:card-side bg-secondary text-secondary-content">
+                <div class="absolute badge badge-secondary bottom-0 right-0">Rating: @item.Rating</div>
+                <div class="absolute badge badge-accent bottom-0">@item.Date.ToString("dd-MM-yyyy")</div>
+                <div class="card-body">
+                    <div class="justify-end card-actions">
+
+                        <a href="javascript:void(0)" onclick="location.href='#@item.Id'" class="btn btn-error btn-square">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </a>
+                        <div id="@item.Id" class="modal">
+                            <div class="modal-box">
+                                <p class="text-red-400 text-xl font-bold">Are you sure you want to remove <span class="text-green-600">@item.Title</span>?</p>
+                                <div class="modal-action">
+                                    <a asp-action="Remove" asp-route-id="@item.Id" class="btn btn-primary">Remove</a>
+                                    <a href="#" class="btn">Close</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2 class="p-3 h-full font-bold uppercase text-orange-300 bg-gray-800/90 rounded-lg">@item.Title</h2>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn  mt-3">Edit</a>
+                </div>
+            </div>
+        }
+    </div>
+

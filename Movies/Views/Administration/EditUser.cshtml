@@ -1,0 +1,62 @@
+﻿@model EditUserViewModel
+@{
+    ViewBag.Title = "Edit " + Model.UserName;
+}
+
+<div class="flex justify-center">
+    <div class="sm:w-96 w-full">
+        <h1 class="font-bold text-xl">Edit User</h1>
+
+        <form method="post" asp-action="EditUser" enctype="multipart/form-data" class="form-control">
+            <label class="label">
+                <span class="label-text">Id</span>
+            </label>
+            <div asp-validation-summary="All" class="text-red-400"></div>
+            <input asp-for="Id" type="text" disabled class="input input-bordered">
+            <label class="label">
+                <span class="label-text">Email</span>
+            </label>
+            <input asp-for="Email" type="text" placeholder="Enter email address" class="input input-bordered">
+            <span asp-validation-for="Email" class="text-red-400"></span>
+            <label class="label">
+                <span class="label-text">City</span>
+            </label>
+            <input asp-for="City" type="text" placeholder="City" class="input input-bordered">
+            <div class="flex gap-2 justify-end">
+                <a asp-controller="Administration" asp-action="Users" class="btn btn-primary mt-3">Back</a>
+                <a asp-controller="Administration" asp-action="UserMovies" asp-route-id="@Model.Id" class="btn mt-3">Movies</a>
+                <button type="submit" class="btn btn-success mt-3">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="flex justify-center mt-4">
+
+    <div class="sm:w-96 w-full card shadow-2xl lg:card-side bg-secondary text-secondary-content ">
+
+        <div class="card-body flex justify-center">
+            @*<a asp-controller="Administration" asp-action="AddUserToRole" asp-route-id="@Model.Id" class="btn mb-3">Add User</a>*@
+            <div class="font-bold text-xl">Roles</div>
+
+            @if (Model.Roles.Count > 0)
+            {
+                @foreach (var role in Model.Roles)
+                {
+                    <div class="flex items-center justify-between mb-3 ">
+                        <p>@role</p>
+                        <a asp-controller="Administration" asp-action="RemoveRoleFromUser" asp-route-id="@Model.Id" asp-route-role="@role" class="btn btn-error btn-square">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </a>
+                    </div>
+                }
+            }
+            else
+            {
+                <p>No roles found</p>
+            }
+
+        </div>
+    </div>
+</div>

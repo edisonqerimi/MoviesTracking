@@ -1,0 +1,77 @@
+﻿@model List<UserMovie>
+@{
+    ViewBag.Title = "Watchlist";
+    List<int> totalMinutes = new List<int>();
+    foreach (var item in Model)
+    {
+        if (item.Movie.Duration.Contains('h')&& item.Movie.Duration.Contains('m'))
+        {
+            string[] hours = item.Movie.Duration.Split('h', 'm');
+
+            int minutes = int.Parse(hours[0]) * 60 + int.Parse(hours[1]);
+            totalMinutes.Add(minutes);
+        }
+    }
+
+}
+
+<div class="flex  md:justify-between mb-3 flex-col lg:flex-row">
+    <div class="items-center justify-center flex uppercase" style="font-family: 'Supermercado One', cursive; font-size: xx-large; ">Watchlist</div>
+    <div class="items-center justify-center flex">
+        <div class="shadow stats">
+            <div class="stat">
+                <div class="stat-title uppercase">Total movies in watchlist</div>
+                <div class="stat-value text-primary">@Model.Count</div>
+                @*<div class="stat-desc">21% more than last month</div>*@
+            </div>
+        </div>
+        <div class="shadow stats">
+            <div class="stat">
+                <div class="stat-title uppercase">Duration</div>
+                <div class="stat-value ">@totalMinutes.Sum() min.</div>
+                @*<div class="stat-desc">21% more than last month</div>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="manage gap-3">
+
+    @foreach (var item in Model)
+    {
+        string photo;
+        if (item.Movie.PhotoSource == PhotoSource.Upload)
+        {
+            photo = "../uploads/" + item.Movie.PhotoPath;
+        }
+        else if (item.Movie.PhotoSource == PhotoSource.Link)
+        {
+            photo = item.Movie.PhotoLink;
+        }
+        else
+        {
+            photo = "../img/x.jpg";
+        }
+        <div style="background:url(@photo); background-size:cover" class="card shadow-2xl lg:card-side bg-secondary text-secondary-content">
+            <div class="absolute badge badge-ghost bottom-0 right-0">Rating: @item.Movie.Rating</div>
+            <div class="absolute badge badge-ghost bottom-0">@item.Movie.Date.ToString("dd-MM-yyyy")</div>
+            <div class="absolute badge ">Watchlist: @item.AddedDate.ToString("dd-MM-yyyy")</div>
+            <div class="card-body">
+                <div class="justify-end card-actions">
+                    <form method="post" asp-action="RemoveFromWatchList" enctype="multipart/form-data">
+                        <input type="hidden" value="@item.Movie.Id" name="movieId" />
+                        <input type="hidden" value="@ViewContext.RouteData.Values["action"].ToString()" name="returnAction" />
+                        <button type="submit" class="btn btn-error btn-square">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+                <h2 class="p-3 h-full font-bold uppercase text-orange-300 bg-gray-800/90 rounded-lg">@item.Movie.Title</h2>
+                <a asp-action="Details" asp-route-id="@item.Movie.Id" asp-route-backAction="Watchlist" class="btn  mt-3">More</a>
+            </div>
+        </div>
+    }
+</div>

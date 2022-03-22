@@ -1,0 +1,48 @@
+﻿@model List<IdentityRole>
+@{
+    ViewBag.Title = "Roles";
+}
+<div class="mb-3">
+    <a asp-action="CreateRole" class="btn btn-secondary">Create New Role</a>
+    <a asp-action="Users" class="btn btn-primary">Go to users</a>
+</div>
+
+<div class="overflow-x-auto">
+    <table class="table w-full">
+        <thead>
+            <tr>
+                <th onclick="">Role Name</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count > 0)
+            {
+                @foreach (var role in Model)
+                {
+                    <tr>
+                        <td>@role.Name</td>
+                        <td><a asp-action="EditRole" asp-route-id="@role.Id" class="btn ">Edit</a></td>
+                        <td><a href="#@role.Id" class="btn btn-error">Delete</a></td>
+                    </tr>
+                    <div id="@role.Id" class="modal">
+                        <div class="modal-box">
+                            <p class="text-red-400 text-xl font-bold">Are you sure you want to remove <span class="text-green-600">@role.Name</span> Role?</p>
+                            <div class="modal-action">
+                                <a asp-action="DeleteRole" asp-route-id="@role.Id" class="btn btn-primary">Remove</a>
+                                <a href="#" class="btn">Close</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>No roles found</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

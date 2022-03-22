@@ -1,0 +1,50 @@
+﻿@model RegisterViewModel
+@{
+    ViewBag.Title = "User Registration";
+}
+
+<div class="flex justify-center">
+    <div class="sm:w-96 w-full">
+        <h1 class="font-bold text-xl">Register</h1>
+
+        <form method="post" asp-action="Register" enctype="multipart/form-data" class="form-control">
+            <div asp-validation-summary="All" class="text-red-400"></div>
+            <label class="label">
+                <span class="label-text">Username</span>
+            </label>
+            <input asp-for="UserName" type="text" placeholder="Enter username" class="input input-bordered">
+            <span asp-validation-for="UserName" class="text-red-400"></span>
+            <label class="label">
+                <span class="label-text">Email</span>
+            </label>
+            <input asp-for="Email" type="text" placeholder="Enter email address" class="input input-bordered">
+            <span asp-validation-for="Email" class="text-red-400"></span>
+            <label class="label">
+                <span class="label-text">City</span>
+            </label>
+            <input asp-for="City" type="text" placeholder="City" class="input input-bordered">
+            
+            <label class="label">
+                <span class="label-text">Phone number</span>
+            </label>
+            <input asp-for="PhoneNumber" type="text" placeholder="Phone number" class="input input-bordered">
+
+            <label class="label">
+                <span class="label-text">Password</span>
+            </label>
+            <input asp-for="Password" type="password" placeholder="Enter password" class="input input-bordered">
+            <span asp-validation-for="Password" class="text-red-400"></span>
+
+            <label class="label">
+                <span class="label-text">Confirm password</span>
+            </label>
+            <input asp-for="ConfirmPassword"  type="password" placeholder="Confirm password" class="input input-bordered">
+            <span asp-validation-for="ConfirmPassword" class="text-red-400"></span>
+
+            <div class="flex gap-2 justify-end">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-primary mt-3">Back</a>
+                <button type="submit" class="btn btn-success mt-3">Register</button>
+            </div>
+        </form>
+    </div>
+</div>

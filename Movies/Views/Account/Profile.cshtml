@@ -1,0 +1,21 @@
+﻿@model ProfileViewModel
+@{
+    ViewBag.Title = "Profile";
+}
+
+<partial name="_ProfilePartial" />
+
+
+
+<div class="flex flex-row flex-wrap md:flex-nowrap w-full">
+    <div class="grid flex-grow w-full max-h-screen h-48 md:h-96 card bg-base-300 rounded-box place-items-center">Photo</div>
+    <div class="divider divider-vertical"></div>
+    <div class="grid flex-grow w-full max-h-screen md:h-96 card bg-base-300 rounded-box place-items-center">
+        <div class="text-lg">Username: @Model.UserName</div>
+        <div class="text-lg">Email: @Model.Email</div>
+        <div class="text-lg">City: @Model.City</div>
+        <div class="text-lg">Phone Number: @Model.PhoneNumber</div>
+
+    </div>
+</div>
+

@@ -1,0 +1,108 @@
+﻿@model EditViewModel
+@{
+    ViewBag.Title = "Edit " + Model.Title;
+    string photo;
+    if (Model.PhotoSource == PhotoSource.Upload)
+    {
+        photo = "~/uploads/" + Model.ExistingPhotoPath;
+    }
+    else if (Model.PhotoSource == PhotoSource.Link)
+    {
+        photo = Model.PhotoLink;
+    }
+    else
+    {
+        photo = "~/img/x.jpg";
+    }
+}
+
+<div class="flex justify-center">
+    <div class="sm:w-96 w-full">
+        <h1 class="font-bold text-xl">Edit @Model.Title</h1>
+
+        <form method="post" asp-action="Edit" enctype="multipart/form-data" class="form-control">
+            <div asp-validation-summary="ModelOnly" class="text-red-400"></div>
+            <label class="label">
+                <span class="label-text">Title</span>
+            </label>
+            <input asp-for="Title" type="text" placeholder="Title" class="input input-bordered">
+            <span asp-validation-for="Title" class="text-red-400"></span>
+
+            <label class="label">
+                <span class="label-text">Release date</span>
+            </label>
+            <input asp-for="Date" type="date" placeholder="Duration" class="input input-bordered">
+            <span asp-validation-for="Date" class="text-red-400"></span>
+            <label class="label">
+                <span class="label-text">Release date</span>
+            </label>
+            <input asp-for="Duration"  placeholder="Duration" class="input input-bordered">
+            <span asp-validation-for="Duration" class="text-red-400"></span>
+
+            <label class="label">
+                <span class="label-text">Rating</span>
+            </label>
+            <input asp-for="Rating" step="0.1" type="number" placeholder="Rating" class="input input-bordered">
+            <span asp-validation-for="Rating" class="text-red-400"></span>
+
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text">Description</span>
+                </label>
+
+                <textarea asp-for="Description" class="textarea h-24 textarea-bordered textarea-info" placeholder="Description"></textarea>
+                <span asp-validation-for="Description" class="text-red-400"></span>
+            </div>
+
+            <label class="label">
+                <span class="label-text">Trailer</span>
+            </label>
+            <input asp-for="TrailerLink" type="text" placeholder="Enter youtube video Id" class="input input-bordered">
+            <span asp-validation-for="TrailerLink" class="text-red-400"></span>
+            <label class="label">
+                <span class="label-text">Photo Source</span>
+            </label>
+            <select  id="photo-select" asp-for="PhotoSource" asp-items="Html.GetEnumSelectList<PhotoSource>()" class="select select-bordered select-primary w-full">
+                <option disabled="disabled" value="">Choose photo source</option>
+
+            </select>
+            <span asp-validation-for="PhotoSource" class=" text-red-400"></span>
+
+            <div id="photo-link" class="w-full">
+                <label class="label">
+                    <span class="label-text">Photo Link</span>
+                </label>
+                <input oninput="loadPhoto(event)" asp-for="PhotoLink" type="text" placeholder="Enter photo link" class="w-full input input-bordered">
+                <span asp-validation-for="PhotoLink" class="text-red-400"></span>
+            </div>
+
+
+            <div id="photo-upload" class="w-full">
+                <label asp-for="Photo" class="label">
+                    <span class="label-text">Upload Photo</span>
+                </label>
+                <input onchange="loadFile(event)" asp-for="Photo" type="file" class="upload w-full input input-bordered">
+                <span asp-validation-for="Photo" class="text-red-400"></span>
+            </div>
+
+            @if (Model.ExistingPhotoPath != null)
+            {
+                <div class="text-sm">
+                    Last uploaded: <span class="text-green-600">@Model.ExistingPhotoPath</span>
+                </div>
+            }
+            <div class="label-text">Current Photo</div>
+            <div class="w-full h-48 flex justify-center border rounded-lg mb-3">
+                <img id="output" class="object-cover h-full" asp-append-version="true" src="@photo">
+            </div>
+
+            <div class="flex gap-2 justify-end">
+                <a asp-action="Manage" class="btn btn-primary mt-3">Back</a>
+                <button type="submit" class="btn btn-success mt-3">Save Changes</button>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+

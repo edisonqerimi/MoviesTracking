@@ -1,0 +1,82 @@
+﻿@model Movie
+@{
+    ViewBag.Title = Model.Title;
+    string photo;
+    string trailerLink=Model.TrailerLink;
+    if (Model.TrailerLink.Contains("watch?v="))
+    trailerLink = Model.TrailerLink.Split("watch?v=")[1];
+
+    if (Model.PhotoSource == PhotoSource.Upload)
+    {
+        photo = "~/uploads/" + Model.PhotoPath;
+    }
+    else if (Model.PhotoSource == PhotoSource.Link)
+    {
+        photo = Model.PhotoLink;
+    }
+    else
+    {
+        photo = "~/img/x.jpg";
+    }
+    }
+
+<div class="card md:card-side  card-bordered ">
+    <div class="w-full lg:max-h-screen h-96 ">
+        <img class="object-cover h-full w-full" asp-append-version="true" src="@photo">
+    </div>
+    <div class="card-body bg-base-200/80">
+        <h2 class="card-title">
+            @Model.Title
+            <span class="text-primary border-x-2 border-indigo-500 px-1.5">@Model.Date.ToString("dd MMM yyyy")</span>
+            <span class="border-r-2 border-indigo-500 pr-1.5">@Model.Duration</span>
+            <div class="badge badge-secondary mx-2">@Model.Rating</div>
+            
+        </h2>
+        <p>@Model.Description</p>
+
+
+
+        <div class="card-actions">
+            <label id="open"
+                   for="my-modal-2"
+                   class="btn btn-primary modal-button">
+                Trailer
+            </label>
+            <input type="checkbox" id="my-modal-2" class="modal-toggle">
+            <div class="modal">
+                <div class="w-full lg:w-2/3  bg-base-300/90 rounded-lg p-5">
+                    <iframe allow="fullscreen" type="text/html" id="ytplayer" class="w-full rounded-lg" height="430" >
+                    </iframe>
+                    <div class="modal-action">
+                        <label id="close" for="my-modal-2" class="btn btn-warning">Close</label>
+                    </div>
+                </div>
+            </div>
+            <a asp-action=@ViewBag.BackAction class="btn btn-accent">Back</a>
+            @*            <button class="btn btn-ghost">More info</button>*@
+        </div>
+    </div>
+</div>
+<script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+        var url = 'https://www.youtube.com/embed/@trailerLink?autoplay=1';
+        document.getElementById('ytplayer').src = '';
+        var navB = document.getElementById('navb');
+
+        document.getElementById('open').addEventListener('click', () => {
+            document.getElementById('ytplayer').src = url;
+            navB.classList.add('hidden');
+        })
+
+        document.getElementById('close').addEventListener('click', () => {
+            document.getElementById('ytplayer').src = '';
+            navB.classList.remove('hidden');
+        })
+    })
+
+
+
+</script>
+
+

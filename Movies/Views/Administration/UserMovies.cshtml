@@ -1,0 +1,34 @@
+﻿@model List<UserMovie>
+@{
+    ViewBag.Title = "User Movies";
+}
+<a asp-action="Users" class="btn mb-3 btn-primary">Back</a>
+<div class="overflow-x-auto">
+    <table class="table w-full">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count > 0)
+            {
+
+                foreach (var movie in Model)
+                {
+                    <tr>
+                        <td>@movie.MovieId</td>
+                        <td>@movie.Movie.Title</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>No movies in watchlist of this user found</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

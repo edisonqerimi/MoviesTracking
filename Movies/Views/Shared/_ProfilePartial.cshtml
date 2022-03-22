@@ -1,0 +1,18 @@
+﻿@{ 
+    string action = @ViewContext.RouteData.Values["action"].ToString();
+}
+<div class="tabs tabs-boxed mb-3">
+
+    <a class=@((action == "Profile" ? "tab-active " : "") + "tab tab-md md:tab-lg") asp-controller="Account" asp-action="Profile">
+        Profile
+    </a>
+
+    <a class=@((action == "Edit" ? "tab-active " : "") + "tab tab-md md:tab-lg")  asp-controller="Account" asp-action="Edit">
+        Edit
+    </a>
+
+    <a class=@((action == "ChangePassword" ? "tab-active " : "") + "tab tab-md md:tab-lg")  asp-controller="Account" asp-action="ChangePassword">
+        Change password
+    </a>
+
+</div>

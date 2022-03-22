@@ -1,0 +1,64 @@
+﻿@model List<ApplicationUser>
+@inject UserManager<ApplicationUser> userManager
+@{
+    ViewBag.Title = "Users";
+}
+<div class="mb-3">
+    <a asp-action="Roles" class="btn btn-primary">Go to roles</a>
+</div>
+<div class="overflow-x-auto">
+    <table class="table w-full">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>City</th>
+                <th>Movies</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count > 0)
+            {
+
+                foreach (var user in Model)
+                {
+                    var roles = await userManager.GetRolesAsync(user);
+                    <tr>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td>
+                            @foreach (var role in roles)
+                            {
+                                <div>@role</div>
+                            }
+                        </td>
+                        <td>@user.City</td>
+                        <td>
+                            <a asp-controller="Administration" asp-action="UserMovies" asp-route-id="@user.Id" class="btn">Movies</a>
+                        </td>
+                        <td><a asp-action="EditUser" asp-route-id="@user.Id" class="btn btn-primary">Edit</a></td>
+                        <td><a href="#@user.Id" class="btn btn-error">Delete</a></td>
+                    </tr>
+                    <div id="@user.Id" class="modal">
+                        <div class="modal-box">
+                            <p class="text-red-400 text-xl font-bold">Are you sure you want to remove <span class="text-green-600">@user.UserName</span>?</p>
+                            <div class="modal-action">
+                                <a asp-action="DeleteUser" asp-route-id="@user.Id" class="btn btn-primary">Remove</a>
+                                <a href="#" class="btn">Close</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>No users found</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

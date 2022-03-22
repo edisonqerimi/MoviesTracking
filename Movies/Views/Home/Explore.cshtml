@@ -1,0 +1,73 @@
+﻿@model List<MoviesViewModel>
+@inject AppDbContext context
+@{
+    ViewBag.Title = "Explore Movies";
+
+    string watchlistButtonImg = "";
+    string aspAction = "";
+
+}
+<div class="manage gap-4">
+    @foreach (var item in Model)
+    {
+        string photo;
+        if (item.PhotoSource == PhotoSource.Upload)
+        {
+            photo = "~/uploads/" + item.PhotoPath;
+        }
+        else if (item.PhotoSource == PhotoSource.Link)
+        {
+            photo = item.PhotoLink;
+        }
+        else
+        {
+            photo = "~/img/x.jpg";
+        }
+
+
+
+        @if (item.Added)
+        {
+            watchlistButtonImg = @"https://uxwing.com/wp-content/themes/uxwing/download/48-checkmark-cross/green-checkmark.svg";
+
+            aspAction = "RemoveFromWatchList";
+        }
+        else
+        {
+            watchlistButtonImg = @"https://uxwing.com/wp-content/themes/uxwing/download/48-checkmark-cross/close-red.svg";
+
+            aspAction = "AddToWatchList";
+        }
+
+        <div class="card card-bordered bg-base-300 ">
+            <div class="relative">
+                <div class="absolute badge badge-ghost right-0">Rating: @item.Rating</div>
+                <div class="absolute bg-base-300 bottom-0 text-base border-x-2 border-indigo-500 px-1.5">@item.Date.ToString("dd MMM yyyy")</div>
+                <form method="post" asp-action=@aspAction enctype="multipart/form-data" class="absolute bottom-0 right-0">
+                    <input type="hidden" value="@item.Id" name="movieId" />
+                    <input type="hidden" value="@ViewContext.RouteData.Values["action"].ToString()" name="returnAction" />
+                    <button type="submit" class="btn rounded-full  btn-square  ">
+                        <img src=@watchlistButtonImg />
+                    </button>
+                </form>
+                <img asp-append-version="true" class="h-96 sm:h-64 object-cover object-top  w-full " src="@photo">
+            </div>
+            <div class="relative">
+                <div class="absolute bg-base-300 right-0 text-base border-x-2 border-indigo-500 px-1.5">@item.Duration</div>
+                <div class="card-body">
+
+                    <h2 class="card-title">
+                        <div>@item.Title</div>
+                    </h2>
+                    @*  <p>@item.Description</p>*@
+                    <div class="justify-end card-actions ">
+                        @*                <a target="_blank" href="https://www.youtube.com/embed/@item.TrailerLink" class="btn btn-secondary">Trailer</a>*@
+
+                        <a asp-action="Details" asp-route-id="@item.Id" asp-route-backAction="Explore" class="btn btn-primary">More info</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    }
+</div>

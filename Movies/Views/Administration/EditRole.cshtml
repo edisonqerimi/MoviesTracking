@@ -1,0 +1,68 @@
+﻿@model EditRoleViewModel
+@{
+    ViewBag.Title = "Edit " + Model.RoleName;
+
+}
+<div class="flex justify-center">
+    <div class="sm:w-96 w-full">
+        <h1 class="font-bold text-xl">Edit @Model.RoleName Role</h1>
+
+        <form method="post" asp-action="EditRole" enctype="multipart/form-data" class="form-control">
+            <div asp-validation-summary="All" class="text-red-400"></div>
+            <label class="label">
+                <span class="label-text">Id</span>
+            </label>
+            <input type="text" class="input" asp-for="Id" disabled />
+            <label class="label">
+                <span class="label-text">Role</span>
+            </label>
+            <input asp-for="RoleName" type="text" placeholder="Enter role name" class="input input-bordered">
+            <span asp-validation-for="RoleName" class="text-red-400"></span>
+
+            @for (int i = 0; i < Model.Users.Count; i++)
+            {
+                <input type="hidden" asp-for="@Model.Users[i]" />
+            }
+                
+            
+
+            <div class="flex gap-2 justify-end">
+
+                <a asp-controller="Administration" asp-action="Roles" class="btn btn-primary mt-3">Back</a>
+                <button type="submit" class="btn btn-success mt-3">Update Role</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<div class="flex justify-center mt-4">
+
+    <div class="sm:w-96 w-full card shadow-2xl lg:card-side bg-secondary text-secondary-content ">
+        
+        <div class="card-body flex justify-center">
+            <a asp-controller="Administration" asp-action="AddUserToRole" asp-route-id="@Model.Id" class="btn mb-3">Add User</a>
+            <div class="font-bold text-xl">Users in this role</div>
+
+            @if (Model.Users.Count > 0)
+            {
+                @foreach (var user in Model.Users)
+                {
+        <div class="flex items-center justify-between mb-3 ">
+            <p>@user</p>
+            <a asp-controller="Administration" asp-action="RemoveUserFromRole" asp-route-id="@Model.Id" asp-route-user="@user" class="btn btn-error btn-square">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-6 h-6 stroke-current">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </a>
+        </div>
+                }
+            }
+            else
+            {
+                <p>No users found</p>
+            }
+                
+        </div>
+    </div>
+</div>
